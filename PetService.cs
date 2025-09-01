@@ -26,4 +26,27 @@ public class PetService
       _db.AllPets.Add(petEntity);
       return petEntity;
     }
+
+    public Pet UpdatePet(UpdatePetRequestDto pet)
+    {
+        Validator.ValidateObject(pet, 
+            new ValidationContext(pet), 
+            true);
+        var existingPet = _db.AllPets.First(p => p.Id == pet.Id);
+        existingPet.Age = pet.Age;
+        existingPet.Name = pet.Name;
+        return existingPet;
+    }
+
+    public Pet DeletePet(string petId)
+    {
+        var existingPet = _db.AllPets.First(p => p.Id == petId);
+        _db.AllPets.Remove(existingPet);
+        return existingPet;
+    }
+
+    public List<Pet> GetAllPets()
+    {
+        return _db.AllPets;
+    }
 }

@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace serversidevalidation;
@@ -13,14 +12,23 @@ public class PetController(PetService petService) : ControllerBase
         var result = petService.CreatePet(p);
         return result;
     }
-    
-    
-}
 
-public record CreatePetRequestDto
-{
-    [MinLength(3)]
-    public string Name { get; set; }
-    [Range(0,15)]
-    public int Age { get; set; }
+    [HttpPatch(nameof(UpdatePet))]
+    public Pet UpdatePet([FromBody]UpdatePetRequestDto p)
+    {
+        return petService.UpdatePet(p);
+    }
+
+    [HttpDelete(nameof(DeletePet))]
+    public Pet DeletePet(string petId)
+    {
+        return petService.DeletePet(petId);
+    }
+
+    [HttpGet(nameof(GetAllPets))]
+    public List<Pet> GetAllPets()
+    {
+        return petService.GetAllPets();
+    }
+    
 }

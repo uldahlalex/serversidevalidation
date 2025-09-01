@@ -1,19 +1,26 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace serversidevalidation;
 
-public class PetController : ControllerBase
+[ApiController]
+public class PetController(PetService petService) : ControllerBase
 {
-    private readonly PetService _petService;
-
-    public PetController(PetService p)
-    {
-        _petService = p;
-    }
     
-    public Pet CreatePet([FromBody] Pet p)
+    [HttpPost(nameof(CreatePet))]
+    public Pet CreatePet([FromBody]CreatePetRequestDto p)
     {
-        var result = _petService.CreatePet(p);
+        var result = petService.CreatePet(p);
         return result;
     }
+    
+    
+}
+
+public record CreatePetRequestDto
+{
+    [MinLength(3)]
+    public string Name { get; set; }
+    [Range(0,15)]
+    public int Age { get; set; }
 }
